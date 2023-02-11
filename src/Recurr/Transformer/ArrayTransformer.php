@@ -727,7 +727,9 @@ class ArrayTransformer
     protected function handleInclusions(array $inclusions, array $recurrences)
     {
         foreach ($inclusions as $inclusion) {
-            $recurrence = new Recurrence(clone $inclusion->date, clone $inclusion->date);
+            $recurrence_start = (new \DateTime($inclusion->date->format('Y-m-d')))->setTime($start->format('H'), $start->format('i'), $start->format('s'));
+            $recurrence_end = (new \DateTime($inclusion->date->format('Y-m-d')))->setTime($end->format('H'), $end->format('i'), $end->format('s'));
+            $recurrence = new Recurrence($recurrence_start, $recurrence_end);
             $recurrences[] = $recurrence;
         }
 
