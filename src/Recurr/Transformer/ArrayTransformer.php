@@ -677,7 +677,7 @@ class ArrayTransformer
             $recurrences[] = new Recurrence($start, $end->add($durationInterval), $key);
         }
 
-        $recurrences = $this->handleInclusions($rule->getRDates(), $recurrences);
+        $recurrences = $this->handleInclusions($rule->getRDates(), $recurrences, $start, $end);
         $recurrences = $this->handleExclusions($rule->getExDates(), $recurrences);
 
         return new RecurrenceCollection($recurrences);
@@ -724,7 +724,7 @@ class ArrayTransformer
      *
      * @return Recurrence[]
      */
-    protected function handleInclusions(array $inclusions, array $recurrences)
+    protected function handleInclusions(array $inclusions, array $recurrences, $start, $end)
     {
         foreach ($inclusions as $inclusion) {
             $recurrence_start = (new \DateTime($inclusion->date->format('Y-m-d')))->setTime($start->format('H'), $start->format('i'), $start->format('s'));
