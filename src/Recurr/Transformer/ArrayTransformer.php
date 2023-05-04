@@ -726,9 +726,17 @@ class ArrayTransformer
      */
     protected function handleInclusions(array $inclusions, array $recurrences, $start, $end)
     {
+        //handle overnight events
+        $temp_start = clone $start;
+        $temp_end = clone $end;
+        $temp_start->setTime(0, 0, 0);
+        $temp_end->setTime(0, 0, 0);
+        $date_diff = $temp_start->diff($temp_end)->format('%a');
+        
         foreach ($inclusions as $inclusion) {
             $recurrence_start = (new \DateTime($inclusion->date->format('Y-m-d')))->setTime($start->format('H'), $start->format('i'), $start->format('s'));
             $recurrence_end = (new \DateTime($inclusion->date->format('Y-m-d')))->setTime($end->format('H'), $end->format('i'), $end->format('s'));
+            $recurrence_end->modify('+'.$date_diff.' days');
             $recurrence = new Recurrence($recurrence_start, $recurrence_end);
             $recurrences[] = $recurrence;
         }
